@@ -1,7 +1,7 @@
 pipeline {
 agent any
 
-```
+
 environment {
     REGISTRY = "D_USER/my-app0"
     REGISTRY_CREDENTIALS = 'D_PASS'
@@ -69,6 +69,5 @@ stages {
         }
     }
 }
-```
 
 }
