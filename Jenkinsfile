@@ -46,25 +46,8 @@ stages {
 
     stage('Deploy to EC2') {
         steps {
-            sshagent(credentials: [SSH_CREDENTIALS_ID]) {
-                sh """
-                    ssh -o StrictHostKeyChecking=no ubuntu@${EC2_HOST} <<EOF
-
-                    echo "Pulling latest image"
-                    sudo docker pull ${REGISTRY}:${IMAGE_TAG}
-
-                    echo "Stopping old container"
-                    if sudo docker ps -a | grep -q "${CONTAINER_NAME}"; then
-                        sudo docker stop ${CONTAINER_NAME}
-                        sudo docker rm ${CONTAINER_NAME}
-                    fi
-
-                    echo "Starting new container"
-                    sudo docker run -d --name ${CONTAINER_NAME} -p 8080:80 ${REGISTRY}:${IMAGE_TAG}
-
-                    echo "Deployment complete"
-                    EOF
-                """
+            sshagent(credentials: [HOST_KEY]) {
+                sh "ssh -o StrictHostKeyChecking=no ubuntu@${EC2_HOST} 'docker pull ${REGISTRY}:${IMAGE_TAG} && docker stop ${CONTAINER_NAME} || true && docker rm ${CONTAINER_NAME} || true && docker run -d --name ${CONTAINER_NAME} -p 3000:3000 ${REGISTRY}:${IMAGE_TAG}'"
             }
         }
     }
