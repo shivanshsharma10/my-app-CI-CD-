@@ -44,10 +44,21 @@ stages {
         }
     }
 
+    stage('Debug') {
+    steps {
+        sh """
+        echo USER: $REGISTRY_CREDENTIALS_USR
+        echo IMAGE: $REGISTRY
+        echo TAG: $IMAGE_TAG
+        echo HOST: $EC2_HOST
+        """
+        }
+    }
+
     stage('Deploy to EC2') {
         steps {
             sshagent(['HOST_KEY']) {
-                sh "ssh -o StrictHostKeyChecking=no ubuntu@${EC2_HOST} 'docker pull ${REGISTRY_CREDENTIALS_USR}/${REGISTRY}:${IMAGE_TAG} && docker stop ${CONTAINER_NAME} || true && docker rm ${CONTAINER_NAME} || true && docker run -d --name ${CONTAINER_NAME} -p 3000:3000 ${REGISTRY}:${IMAGE_TAG}'"
+                sh """ ssh -o StrictHostKeyChecking=no ubuntu@${EC2_HOST} 'docker pull ${REGISTRY_CREDENTIALS_USR}/${REGISTRY}:${IMAGE_TAG} && docker stop ${CONTAINER_NAME} || true && docker rm ${CONTAINER_NAME} || true && docker run -d --name ${CONTAINER_NAME} -p 3000:3000 ${REGISTRY}:${IMAGE_TAG}'"""
             }
         }
     }
