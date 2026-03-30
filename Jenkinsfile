@@ -62,7 +62,9 @@ stages {
             keyFileVariable: 'SSH_KEY'
         )]) {
             sh """
-            ssh -i $SSH_KEY -o StrictHostKeyChecking=no ubuntu@${EC2_HOST} '
+            ls -l $SSH_KEY
+            ssh -i $SSH_KEY -o StrictHostKeyChecking=no ubuntu@${EC2_HOST} 'echo connected'
+            '
                 docker pull ${REGISTRY_CREDENTIALS_USR}/${REGISTRY}:${IMAGE_TAG} &&
                 docker stop ${CONTAINER_NAME} || true &&
                 docker rm ${CONTAINER_NAME} || true &&
