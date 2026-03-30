@@ -61,10 +61,10 @@ stages {
             credentialsId: 'HOST_KEY',
             keyFileVariable: 'SSH_KEY'
         )]) {
-           sh '''
+             sh '''
                 ssh -i "$SSH_KEY" -o StrictHostKeyChecking=no ubuntu@'"$EC2_HOST"' "
                     docker pull '"$REGISTRY_CREDENTIALS_USR"'/'"$REGISTRY"':'"$IMAGE_TAG"' &&
-                    docker rm -f \$(docker ps -aq --filter "publish=3000") || true &&
+                    docker rm -f \$(docker ps -aq --filter publish=3000) || true &&
                     docker run -d --name my-app0 -p 3000:3000 '"$REGISTRY_CREDENTIALS_USR"'/'"$REGISTRY"':'"$IMAGE_TAG"'
                 "
                 '''
