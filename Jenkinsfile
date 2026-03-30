@@ -56,9 +56,16 @@ stages {
     }
 
     stage('Deploy to EC2') {
-        steps {
-            sshagent(['HOST_KEY']) {
-                sh """ ssh -o StrictHostKeyChecking=no ubuntu@${EC2_HOST} 'docker pull ${REGISTRY_CREDENTIALS_USR}/${REGISTRY}:${IMAGE_TAG} && docker stop ${CONTAINER_NAME} || true && docker rm ${CONTAINER_NAME} || true && docker run -d --name ${CONTAINER_NAME} -p 3000:3000 ${REGISTRY}:${IMAGE_TAG}'"""
+    steps {
+        sshagent(['HOST_KEY']) {
+            sh """
+            ssh -o StrictHostKeyChecking=no ubuntu@${EC2_HOST} '
+                docker pull ${REGISTRY_CREDENTIALS_USR}/${REGISTRY}:${IMAGE_TAG} &&
+                docker stop ${CONTAINER_NAME} || true &&
+                docker rm ${CONTAINER_NAME} || true &&
+                docker run -d --name ${CONTAINER_NAME} -p 3000:3000 ${REGISTRY_CREDENTIALS_USR}/${REGISTRY}:${IMAGE_TAG}
+            '
+            """
             }
         }
     }
