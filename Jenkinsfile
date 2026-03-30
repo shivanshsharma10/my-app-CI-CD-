@@ -3,9 +3,9 @@ agent any
 
 
 environment {
-    REGISTRY = "D_USER/my-app0"
-    REGISTRY_CREDENTIALS = 'D_PASS'
-    EC2_HOST = 'portfolio.outcasted.site'
+    REGISTRY = "my-app0"
+    REGISTRY_CREDENTIALS = credentials('D_AUTH')
+    EC2_HOST = 'http://ec2-13-201-28-74.ap-south-1.compute.amazonaws.com/'
     CONTAINER_NAME = 'my-app0'
     IMAGE_TAG = "${BUILD_NUMBER}"
     SSH_CREDENTIALS_ID = 'HOST_KEY'
