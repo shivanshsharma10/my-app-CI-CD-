@@ -57,9 +57,12 @@ stages {
 
     stage('Deploy to EC2') {
     steps {
-        sshagent(['HOST_KEY']) {
+        withCredentials([sshUserPrivateKey(
+            credentialsId: 'HOST_KEY',
+            keyFileVariable: 'SSH_KEY'
+        )]) {
             sh """
-            ssh -o StrictHostKeyChecking=no ubuntu@${EC2_HOST} '
+            ssh -i $SSH_KEY -o StrictHostKeyChecking=no ubuntu@${EC2_HOST} '
                 docker pull ${REGISTRY_CREDENTIALS_USR}/${REGISTRY}:${IMAGE_TAG} &&
                 docker stop ${CONTAINER_NAME} || true &&
                 docker rm ${CONTAINER_NAME} || true &&
