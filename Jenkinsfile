@@ -3,7 +3,7 @@ agent any
 
 
 environment {
-    REGISTRY = "my-app0"
+    REGISTRY = "my-app"
     REGISTRY_CREDENTIALS = credentials('D_AUTH')
     EC2_HOST = 'http://ec2-13-201-28-74.ap-south-1.compute.amazonaws.com/'
     CONTAINER_NAME = 'my-app0'
